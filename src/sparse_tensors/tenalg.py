@@ -1,7 +1,10 @@
 import numpy as np
-from numba import njit
-
-
+try:
+    from numba import njit
+    from numba.typed import List
+    USE_NUMBA = True
+except ImportError:
+    USE_NUMBA = False
 
 def make_numba_list(native_list):
     numba_list = List()
