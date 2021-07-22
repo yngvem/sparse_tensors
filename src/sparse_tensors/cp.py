@@ -3,7 +3,7 @@ from .optimize_wrapper import minimize
 import numpy as np
 import sparse
 import warnings
-from .tenalg import _mttkrp_numba, _mttkrp_from_raw, mttkrp
+from .tenalg import _mttkrp_numba, _mttkrp_numpy
 try:
     from numba import njit
     from numba.typed import List
@@ -78,7 +78,7 @@ def cp_loss_and_grad(cp_tensor, indices, tensor_data, importance_weights=None):
     cp_elements = construct_cp_elements(cp_tensor, indices)
     error = cp_elements - tensor_data
     
-    grads = [_mttkrp_from_raw(indices, error, factors, skip_mode) for skip_mode, _ in enumerate(factors)]
+    grads = [_mttkrp_numpy(indices, error, factors, skip_mode) for skip_mode, _ in enumerate(factors)]
 
     return 0.5*np.sum(error**2), (None, grads)
 

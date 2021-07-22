@@ -13,6 +13,7 @@ def make_numba_list(native_list):
     return numba_list
 
 
+#TODO: See if this can be jitted for sgd
 def _mttkrp_numpy(nnz_indices, data, factor_matrices, skip_mode):
     rank = factor_matrices[0].shape[1]
     mttkrp = np.empty_like(factor_matrices[skip_mode])
@@ -56,12 +57,12 @@ def _mttkrp_numba(nnz_indices, data, factor_matrices, skip_mode):
 def _mttkrp_from_raw(nnz_indices, data, factor_matrices, skip_mode):
     if USE_NUMBA:
         numba_factors = make_numba_list(factor_matrices)
-        return _mttkrp_numba(np.array(nnz_indices), data, numba_factors, skip_mode)
+        return _mttkrp_numba(np.asarray(nnz_indices), data, numba_factors, skip_mode)
     else:
         return _mttkrp_numpy(nnz_indices, data, factor_matrices, skip_mode)
 
 
 def mttkrp(tensor, factor_matrices, skip_mode):
     nonzero = np.array(tensor.nonzero())
-    return _mttkrp_from_raw(nonzero, tensor.data, factor_matrices, skip_mode)
+    return _mttkrp_numpy(nonzero, tensor.data, factor_matrices, skip_mode)
 
