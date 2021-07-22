@@ -5,4 +5,4 @@ __email__ = 'yngve.m.moe@gmail.com'
 __version__ = '0.0.1'
 
 
-from .cp_grad import cp_wopt
+from .cp import cp_wopt
